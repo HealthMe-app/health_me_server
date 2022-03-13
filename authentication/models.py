@@ -12,8 +12,6 @@ class UserManager(BaseUserManager):
             raise ValueError('Не введено имя')
         if not date_of_birth:
             raise ValueError('Не введена дата рождения')
-        if not sex:
-            raise ValueError('Не выбран пол')
         user = self.model(
             email=self.normalize_email(email),
             first_name=first_name,
