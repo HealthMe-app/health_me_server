@@ -3,14 +3,17 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
 
+
 class UserManager(BaseUserManager):
     def create_user(self, email, first_name, sex, date_of_birth, password=None):
         if not email:
-            raise ValueError('Users must have an email address')
+            raise ValueError('Не введена электронная почта')
         if not first_name:
-            raise ValueError('Users must have a first name')
+            raise ValueError('Не введено имя')
         if not date_of_birth:
-            raise ValueError('Users must have a date of birth')
+            raise ValueError('Не введена дата рождения')
+        if not sex:
+            raise ValueError('Не выбран пол')
         user = self.model(
             email=self.normalize_email(email),
             first_name=first_name,
@@ -42,7 +45,7 @@ class User(AbstractBaseUser):
     )
     first_name = models.CharField(max_length=255)
     date_of_birth = models.DateField()
-    sex = models.BooleanField() # 0m, 1f
+    sex = models.BooleanField()  # 0m, 1f
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
