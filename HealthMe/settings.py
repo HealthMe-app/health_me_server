@@ -68,6 +68,11 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
 }
 
+REST_KNOX = {
+    'TOKEN_TTL': timedelta(weeks=1),
+    'AUTO_REFRESH': True
+}
+
 AUTH_USER_MODEL = 'authentication.User'
 
 AUTH_PASSWORD_VALIDATORS = [
