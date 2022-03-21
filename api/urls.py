@@ -1,8 +1,8 @@
-from django.urls import re_path, path
+from django.urls import path
 from api import views
 
 urlpatterns = [
-    path('appointment', views.appointmentAPI),
-    path('appointment/', views.appointmentAPI),
-    re_path(r'^appointment/([0-9]+)$', views.appointmentAPI)
+    path('appointment/', views.AppointmentView.as_view()),
+    path('appointments', views.UserAppointmentView.as_view()),
+    path('appointment/<int:pk>', views.AppointmentDetailView.as_view())
 ]

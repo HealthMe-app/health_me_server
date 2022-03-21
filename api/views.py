@@ -1,46 +1,33 @@
-import logging
-
-from django.contrib.auth import get_user
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
 from rest_framework import generics, permissions
-from django.http.response import JsonResponse
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from authentication.serializers import UserSerializer
-from authentication.views import UserAPI
-from .models import ProcedureType, Procedure, Appointment
-from .serializers import ProcedureTypeSerializer, ProcedureSerializer, AppointmentSerializer
-from authentication.models import User
+from .models import Appointment, ProcedureType
+from .serializers import AppointmentSerializer
 
 
-@csrf_exempt
-def appointmentAPI(request, id=0):
+class AppointmentView(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentSerializer
 
-    if request.method == 'GET':
-        appointments = Appointment.objects.all()
-        appointments_serializer = AppointmentSerializer(appointments, many=True)
-        return JsonResponse(appointments_serializer.data, safe=False)
+    def perform_create(self, serializer):
+        user = self.request.user
+        ptype = generics.get_object_or_404(ProcedureType, id=self.request.data.get('ptype'))
+        return serializer.save(user=user, ptype=ptype)
 
-    if request.method == 'POST':
-        appointment_data = JSONParser().parse(request)
-        appointments_serializer = AppointmentSerializer(data=appointment_data)
-        if appointments_serializer.is_valid():
-            appointments_serializer.save()
-            return JsonResponse("Запись успешно добавлена", safe=False)
-        return JsonResponse("{}".format(get_user(request)), safe=False)
 
-    if request.method == 'PUT':
-        appointment_data = JSONParser().parse(request)
-        appointment = Appointment.objects.get(id=appointment_data['id'])
-        appointments_serializer = AppointmentSerializer(appointment, data=appointment_data)
-        if appointments_serializer.is_valid():
-            appointments_serializer.save()
-            return JsonResponse("Запись успешно отредактирована", safe=False)
-        return JsonResponse("Ошибка редактирования записи", safe=False)
+class UserAppointmentView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
-    if request.method == 'DELETE':
-        appointment = Appointment.objects.get(id=id)
-        appointment.delete()
-        return JsonResponse("Запись успешно удалена", safe=False)
+    def get(self, request):
+        appointments = Appointment.objects.filter(user=self.request.user)
+        serializer_class = AppointmentSerializer(appointments, many=True)
+        return Response(serializer_class.data)
+
+
+class AppointmentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentSerializer
+

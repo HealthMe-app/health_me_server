@@ -30,4 +30,5 @@ class LoginSerializer(serializers.Serializer):
         user = authenticate(**data)
         if user and user.is_active:
             return user
-        raise serializers.ValidationError('This user has been deactivated.')
+        raise serializers.ValidationError('Неверный логин или пароль')
+
