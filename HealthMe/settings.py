@@ -104,6 +104,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 django_heroku.settings(locals())
 if os.environ.get('ENV') == 'development':
     del DATABASES['default']['OPTIONS']['sslmode']

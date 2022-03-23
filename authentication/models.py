@@ -10,6 +10,8 @@ class UserManager(BaseUserManager):
             raise ValueError('Не введена электронная почта')
         if not first_name:
             raise ValueError('Не введено имя')
+        if not sex:
+            raise ValueError('Не выбран пол')
         if not date_of_birth:
             raise ValueError('Не введена дата рождения')
         user = self.model(
@@ -43,7 +45,8 @@ class User(AbstractBaseUser):
     )
     first_name = models.CharField(max_length=255)
     date_of_birth = models.DateField()
-    sex = models.BooleanField()  # 0m, 1f
+    sex = models.CharField(max_length=1)  # 1m, 2f
+    pic = models.ImageField(default='images/jessica.svg')
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
