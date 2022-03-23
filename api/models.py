@@ -5,6 +5,7 @@ from django.db import models
 class ProcedureType(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=64)
+    icon = models.ImageField(default='images/doctor.svg')
 
 
 class Procedure(models.Model):
