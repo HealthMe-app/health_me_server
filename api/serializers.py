@@ -24,3 +24,16 @@ class AppointmentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class SeveritySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Severity
+        fields = '__all__'
+
+
+class SymptomSerializer(serializers.ModelSerializer):
+    severity = SeveritySerializer(read_only=True)
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Symptom
+        fields = '__all__'

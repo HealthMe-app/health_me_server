@@ -46,7 +46,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=255)
     date_of_birth = models.DateField()
     sex = models.CharField(max_length=1)  # 1m, 2f
-    pic = models.ImageField(default='images/jessica.svg')
+    pic = models.CharField(max_length=16, default="Jessica")
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
