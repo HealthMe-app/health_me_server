@@ -24,16 +24,16 @@ class AppointmentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class SeveritySerializer(serializers.ModelSerializer):
+class NoteTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Severity
+        model = NoteType
         fields = '__all__'
 
 
-class SymptomSerializer(serializers.ModelSerializer):
-    severity = SeveritySerializer(read_only=True)
+class NoteSerializer(serializers.ModelSerializer):
+    ntype = NoteTypeSerializer(read_only=True)
     user = UserSerializer(read_only=True)
 
     class Meta:
-        model = Symptom
+        model = Note
         fields = '__all__'

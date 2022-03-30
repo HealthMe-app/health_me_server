@@ -12,10 +12,12 @@ class TypeBase(models.Model):
 
 class ProcedureType(TypeBase):
     icon = models.ImageField(default='images/doctor.svg')
+    icon_pink = models.ImageField(default='images/doctor_pink.svg')
 
 
-class Severity(TypeBase):
-    icon = models.ImageField(default='images/light.svg')
+class NoteType(TypeBase):
+    icon = models.ImageField(default='images/pill.svg')
+    icon_birch = models.ImageField(default='images/pill_birch.svg')
 
 
 class Procedure(models.Model):
@@ -41,5 +43,5 @@ class Appointment(EntryBase):
     ptype = models.ForeignKey(ProcedureType, models.DO_NOTHING)
 
 
-class Symptom(EntryBase):
-    severity = models.ForeignKey(Severity, models.DO_NOTHING)
+class Note(EntryBase):
+    ntype = models.ForeignKey(NoteType, models.DO_NOTHING)
