@@ -42,6 +42,10 @@ class AppointmentDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
 
+    def perform_update(self, serializer):
+        ptype = generics.get_object_or_404(ProcedureType, id=self.request.data.get('ptype'))
+        return serializer.save(ptype=ptype)
+
 
 class NoteView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -70,3 +74,7 @@ class NoteDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
+
+    def perform_update(self, serializer):
+        ntype = generics.get_object_or_404(NoteType, id=self.request.data.get('ntype'))
+        return serializer.save(ntype=ntype)
