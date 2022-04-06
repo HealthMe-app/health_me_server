@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-
+import datetime
 
 class TypeBase(models.Model):
     id = models.AutoField(primary_key=True)
@@ -22,8 +22,9 @@ class NoteType(TypeBase):
 
 class Procedure(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=128)
-    default_frequency = models.DurationField()
+    name = models.CharField(max_length=128, unique=True)
+    frequency = models.DurationField()
+    start_date = models.DateField()
     ptype = models.ForeignKey(ProcedureType, models.DO_NOTHING)
 
 
@@ -45,3 +46,5 @@ class Appointment(EntryBase):
 
 class Note(EntryBase):
     ntype = models.ForeignKey(NoteType, models.DO_NOTHING)
+
+

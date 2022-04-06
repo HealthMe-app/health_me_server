@@ -4,14 +4,17 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Appointment, ProcedureType, NoteType, Note
-from .serializers import AppointmentSerializer, NoteSerializer
+from .models import Appointment, ProcedureType, NoteType, Note, Procedure
+from .serializers import AppointmentSerializer, NoteSerializer, ProcedureSerializer
 
 
-class AppointmentView(generics.ListCreateAPIView):
+class AppointmentView(generics.ListCreateAPIView, generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
+
+    def get_queryset(self):
+        appointments = Appointment.objects.filter(user=self.request.user)
+        return appointments.order_by('date_time')
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -49,8 +52,11 @@ class AppointmentDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class NoteView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = Note.objects.all()
     serializer_class = NoteSerializer
+
+    def get_queryset(self):
+        appointments = Appointment.objects.filter(user=self.request.user)
+        return appointments.order_by('date_time')
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -78,3 +84,15 @@ class NoteDetailView(generics.RetrieveUpdateDestroyAPIView):
     def perform_update(self, serializer):
         ntype = generics.get_object_or_404(NoteType, id=self.request.data.get('ntype'))
         return serializer.save(ntype=ntype)
+
+
+class ProcedureView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Procedure.objects.all()
+    serializer_class = ProcedureSerializer
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        ptype = generics.get_object_or_404(Procedure, id=self.request.data.get('ptype'))
+        frequency = datetime.timedelta(seconds=self.request.data.get('frequency'))
+        return serializer.save(user=user, ptype=ptype, frequency=frequency)

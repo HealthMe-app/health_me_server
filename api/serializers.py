@@ -10,6 +10,9 @@ class ProcedureTypeSerializer(serializers.ModelSerializer):
 
 
 class ProcedureSerializer(serializers.ModelSerializer):
+    ptype = ProcedureTypeSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = Procedure
         fields = '__all__'
