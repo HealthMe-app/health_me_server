@@ -55,8 +55,8 @@ class NoteView(generics.ListCreateAPIView):
     serializer_class = NoteSerializer
 
     def get_queryset(self):
-        appointments = Appointment.objects.filter(user=self.request.user)
-        return appointments.order_by('date_time')
+        notes = Note.objects.filter(user=self.request.user)
+        return notes.order_by('date_time')
 
     def perform_create(self, serializer):
         user = self.request.user
