@@ -4,8 +4,8 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Appointment, ProcedureType, NoteType, Note, Procedure
-from .serializers import AppointmentSerializer, NoteSerializer, ProcedureSerializer
+from .models import Appointment, ProcedureType, NoteType, Note  # , Procedure
+from .serializers import AppointmentSerializer, NoteSerializer  # , ProcedureSerializer
 
 
 class AppointmentView(generics.ListCreateAPIView, generics.ListAPIView):
@@ -86,13 +86,13 @@ class NoteDetailView(generics.RetrieveUpdateDestroyAPIView):
         return serializer.save(ntype=ntype)
 
 
-class ProcedureView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = Procedure.objects.all()
-    serializer_class = ProcedureSerializer
-
-    def perform_create(self, serializer):
-        user = self.request.user
-        ptype = generics.get_object_or_404(Procedure, id=self.request.data.get('ptype'))
-        frequency = datetime.timedelta(seconds=self.request.data.get('frequency'))
-        return serializer.save(user=user, ptype=ptype, frequency=frequency)
+# class ProcedureView(APIView):
+#     permission_classes = [permissions.IsAuthenticated]
+#     queryset = Procedure.objects.all()
+#     serializer_class = ProcedureSerializer
+#
+#     def perform_create(self, serializer):
+#         user = self.request.user
+#         ptype = generics.get_object_or_404(Procedure, id=self.request.data.get('ptype'))
+#         frequency = datetime.timedelta(seconds=self.request.data.get('frequency'))
+#         return serializer.save(user=user, ptype=ptype, frequency=frequency)

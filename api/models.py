@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-import datetime
+
 
 class TypeBase(models.Model):
     id = models.AutoField(primary_key=True)
@@ -20,12 +20,12 @@ class NoteType(TypeBase):
     icon_birch = models.ImageField(default='images/pill_birch.svg')
 
 
-class Procedure(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=128, unique=True)
-    frequency = models.DurationField()
-    start_date = models.DateField()
-    ptype = models.ForeignKey(ProcedureType, models.DO_NOTHING)
+# class Procedure(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     name = models.CharField(max_length=128, unique=True)
+#     frequency = models.DurationField()
+#     start_date = models.DateField()
+#     ptype = models.ForeignKey(ProcedureType, models.CASCADE)
 
 
 class EntryBase(models.Model):
@@ -33,7 +33,7 @@ class EntryBase(models.Model):
     name = models.CharField(max_length=64)
     date_time = models.DateTimeField()
     comment = models.TextField(null=True)
-    user = models.ForeignKey(get_user_model(), models.DO_NOTHING)
+    user = models.ForeignKey(get_user_model(), models.CASCADE)
 
     class Meta:
         abstract = True
@@ -41,10 +41,10 @@ class EntryBase(models.Model):
 
 class Appointment(EntryBase):
     address = models.CharField(max_length=255)
-    ptype = models.ForeignKey(ProcedureType, models.DO_NOTHING)
+    ptype = models.ForeignKey(ProcedureType, models.CASCADE)
 
 
 class Note(EntryBase):
-    ntype = models.ForeignKey(NoteType, models.DO_NOTHING)
+    ntype = models.ForeignKey(NoteType, models.CASCADE)
 
 
