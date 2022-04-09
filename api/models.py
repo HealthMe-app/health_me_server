@@ -33,7 +33,7 @@ class EntryBase(models.Model):
     name = models.CharField(max_length=64)
     date_time = models.DateTimeField()
     comment = models.TextField(null=True)
-    user = models.ForeignKey(get_user_model(), models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
     class Meta:
         abstract = True
@@ -41,10 +41,10 @@ class EntryBase(models.Model):
 
 class Appointment(EntryBase):
     address = models.CharField(max_length=255)
-    ptype = models.ForeignKey(ProcedureType, models.CASCADE)
+    ptype = models.ForeignKey(ProcedureType, on_delete=models.CASCADE)
 
 
 class Note(EntryBase):
-    ntype = models.ForeignKey(NoteType, models.CASCADE)
+    ntype = models.ForeignKey(NoteType, on_delete=models.CASCADE)
 
 
